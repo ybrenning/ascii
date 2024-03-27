@@ -8,10 +8,12 @@
 </head>
 
 <body>
-	test
 	<img src="img/placeholder.png", id="uploaded-img">
-	<input type="file" name="upload" accept="image/jpeg", id="current-input">
-	<div id="list"></div>
+	<input type="file" name="upload" accept="image/jpeg", id="current-input"><br>
+	<label for="img-size">Size of ASCII art (in characters):</label>
+	<input type="text" id="img-size" value="100">
+
+	<div id="ascii" class="ascii"></div>
 
 	<script src="index.js"></script>
 </body>

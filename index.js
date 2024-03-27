@@ -1,21 +1,45 @@
-var displayImage = document.getElementById("uploaded-img");
-var inputFile = document.getElementById("current-input");
+const displayImage = document.getElementById("uploaded-img");
+const inputFile = document.getElementById("current-input");
+
 
 inputFile.onchange = function() {
+	const maxWidth = document.getElementById("img-size").value;
+	const maxHeight = maxWidth;
+
 	displayImage.src = URL.createObjectURL(inputFile.files[0]);
-	console.log(inputFile.files[0]);
 
-	var canvas = document.createElement('canvas');
-	var context = canvas.getContext('2d');
+	displayImage.onload = function() {
+		const canvas = document.createElement('canvas');
+		canvas.style.display="none";
+		const context = canvas.getContext('2d');
 
-	displayImage.onload = function() { // Wait for the image to load
-		canvas.width = displayImage.width; // Set canvas dimensions to image dimensions
-		canvas.height = displayImage.height;
-		context.drawImage(displayImage, 0, 0); // Draw the image onto the canvas
+		let width = displayImage.width;
+		let height = displayImage.height;
 
-		var theData = context.getImageData(0, 0, displayImage.width, displayImage.height); // Get the image data
-		var pixels = theData.data
-		var grayPixels = [];
+		if (width > height) {
+			if (width > maxWidth) {
+				height *= maxWidth / width;
+				width = maxWidth;
+			}
+		} else {
+			if (height > maxHeight) {
+				width *= maxHeight / height;
+				height = maxHeight;
+			}
+		}
+
+		canvas.width = width;
+		canvas.height = height;
+
+		context.drawImage(displayImage, 0, 0, width, height);
+
+		displayImage.width = width;
+		displayImage.height = height;
+
+		const theData = context.getImageData(0, 0, width, height);
+
+		let pixels = theData.data
+		let grayPixels = [];
 		
 		for (let i = 0; i < pixels.length; i+= 4) {
 			let sum = pixels[i] + pixels[i + 1] + pixels[i + 2];
@@ -45,19 +69,18 @@ inputFile.onchange = function() {
 			for (let x = 0; x < displayImage.width; x++) {
 				text = text + grayPixels[y*displayImage.width+x];
 			}
-			text = text + "\n";
+			text = text + "<br></br>";
 		}
 
-		console.log(text);
-		console.log(text.length);
-		var hiddenElement = document.createElement("a");
-		hiddenElement.download = "string.txt";
-		var blob = new Blob([text], {
-			type: "text/plain"
-		});
+		// var hiddenElement = document.createElement("a");
+		// hiddenElement.download = "string.txt";
+		// var blob = new Blob([text], {
+		// 	type: "text/plain"
+		// });
+		//
+		// hiddenElement.href = window.URL.createObjectURL(blob);
+		// hiddenElement.click();
+		document.getElementById("ascii").innerHTML = text;
 
-		hiddenElement.href = window.URL.createObjectURL(blob);
-		hiddenElement.click();
-		// document.getElementById("list").innerHTML = text;
     };
 };
