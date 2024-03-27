@@ -72,14 +72,17 @@ inputFile.onchange = function() {
 			text = text + "<br></br>";
 		}
 
-		// var hiddenElement = document.createElement("a");
-		// hiddenElement.download = "string.txt";
-		// var blob = new Blob([text], {
-		// 	type: "text/plain"
-		// });
-		//
-		// hiddenElement.href = window.URL.createObjectURL(blob);
-		// hiddenElement.click();
+		if (document.getElementById("download-txt").checked) {
+			var hiddenElement = document.createElement("a");
+			hiddenElement.download = "string.txt";
+			var blob = new Blob([text], {
+				type: "text/plain"
+			});
+
+			hiddenElement.href = window.URL.createObjectURL(blob);
+			hiddenElement.click();
+		}
+
 		document.getElementById("ascii").innerHTML = text;
 
     };
