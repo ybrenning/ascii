@@ -28,6 +28,8 @@ inputFile.onchange = function() {
 			}
 		}
 
+		console.log(width);
+		console.log(height);
 		canvas.width = width;
 		canvas.height = height;
 
@@ -63,19 +65,25 @@ inputFile.onchange = function() {
 				grayPixels.push("'")
 			}
 		}
-		let text = "";
+		console.log(grayPixels.length);
+		let downloadText = "";
+		let displayText = "";
 
+		console.log(displayImage.height);
 		for (let y = 0; y < displayImage.height; y++) {
+			let text = "";
 			for (let x = 0; x < displayImage.width; x++) {
 				text = text + grayPixels[y*displayImage.width+x];
 			}
-			text = text + "<br></br>";
+			downloadText = downloadText + text + "\n";
+			displayText = displayText + text + "<br></br>";
 		}
 
+		console.log(displayText.length);
 		if (document.getElementById("download-txt").checked) {
 			var hiddenElement = document.createElement("a");
-			hiddenElement.download = "string.txt";
-			var blob = new Blob([text], {
+			hiddenElement.download = "ascii.txt";
+			var blob = new Blob([downloadText], {
 				type: "text/plain"
 			});
 
@@ -83,7 +91,7 @@ inputFile.onchange = function() {
 			hiddenElement.click();
 		}
 
-		document.getElementById("ascii").innerHTML = text;
+		document.getElementById("ascii").innerHTML = displayText;
 
     };
 };
