@@ -16,12 +16,9 @@ inputFile.onchange = function() {
 		var theData = context.getImageData(0, 0, displayImage.width, displayImage.height); // Get the image data
 		var pixels = theData.data
 		var grayPixels = [];
-		// console.log(pixels);
-		var sums = [];
 		
 		for (let i = 0; i < pixels.length; i+= 4) {
 			let sum = pixels[i] + pixels[i + 1] + pixels[i + 2];
-			sums.push(sum);
 			if (sum == 0) {
 				grayPixels.push("#");
 			} else if (0 < sum && sum <= 100) {
@@ -44,8 +41,6 @@ inputFile.onchange = function() {
 		}
 		let text = "";
 
-		// console.log("sums");
-		// console.log(sums);
 		for (let y = 0; y < displayImage.height; y++) {
 			for (let x = 0; x < displayImage.width; x++) {
 				text = text + grayPixels[y*displayImage.width+x];
@@ -55,6 +50,14 @@ inputFile.onchange = function() {
 
 		console.log(text);
 		console.log(text.length);
-		document.getElementById("list").innerHTML = text;
+		var hiddenElement = document.createElement("a");
+		hiddenElement.download = "string.txt";
+		var blob = new Blob([text], {
+			type: "text/plain"
+		});
+
+		hiddenElement.href = window.URL.createObjectURL(blob);
+		hiddenElement.click();
+		// document.getElementById("list").innerHTML = text;
     };
 };
