@@ -1,8 +1,7 @@
 const displayImage = document.getElementById("uploaded-img");
 const inputFile = document.getElementById("current-input");
 
-
-inputFile.onchange = function() {
+function handleInputChange() {
 	const maxWidth = document.getElementById("img-size").value;
 	const maxHeight = maxWidth;
 
@@ -10,7 +9,6 @@ inputFile.onchange = function() {
 
 	displayImage.onload = function() {
 		const canvas = document.createElement('canvas');
-		canvas.style.display="none";
 		const context = canvas.getContext('2d');
 
 		let width = displayImage.width;
@@ -28,8 +26,6 @@ inputFile.onchange = function() {
 			}
 		}
 
-		console.log(width);
-		console.log(height);
 		canvas.width = width;
 		canvas.height = height;
 
@@ -38,34 +34,34 @@ inputFile.onchange = function() {
 		displayImage.width = width;
 		displayImage.height = height;
 
-		const theData = context.getImageData(0, 0, width, height);
+		const imageData = context.getImageData(0, 0, width, height);
 
-		let pixels = theData.data
-		let grayPixels = [];
+		let pixels = imageData.data
+		let ascii = [];
 		
 		for (let i = 0; i < pixels.length; i+= 4) {
 			let sum = pixels[i] + pixels[i + 1] + pixels[i + 2];
 			if (sum == 0) {
-				grayPixels.push("#");
+				ascii.push("#");
 			} else if (0 < sum && sum <= 100) {
-				grayPixels.push("X");
+				ascii.push("X");
 			} else if (100 < sum && sum <= 200) {
-				grayPixels.push("%");
+				ascii.push("%");
 			} else if (200 < sum && sum <= 300) {
-				grayPixels.push("&");
+				ascii.push("&");
 			} else if (300 < sum && sum <= 400) {
-				grayPixels.push("*");
+				ascii.push("*");
 			} else if (400 < sum && sum <= 500) {
-				grayPixels.push("+");
+				ascii.push("+");
 			} else if (500 < sum && sum <= 600) {
-				grayPixels.push("/");
+				ascii.push("/");
 			} else if (600 < sum && sum <= 700) {
-				grayPixels.push(")");
+				ascii.push(")");
 			} else {
-				grayPixels.push("'")
+				ascii.push("'")
 			}
 		}
-		console.log(grayPixels.length);
+
 		let downloadText = "";
 		let displayText = "";
 
@@ -73,13 +69,12 @@ inputFile.onchange = function() {
 		for (let y = 0; y < displayImage.height; y++) {
 			let text = "";
 			for (let x = 0; x < displayImage.width; x++) {
-				text = text + grayPixels[y*displayImage.width+x];
+				text = text + ascii[y * displayImage.width + x];
 			}
 			downloadText = downloadText + text + "\n";
 			displayText = displayText + text + "<br></br>";
 		}
 
-		console.log(displayText.length);
 		if (document.getElementById("download-txt").checked) {
 			var hiddenElement = document.createElement("a");
 			hiddenElement.download = "ascii.txt";
@@ -95,3 +90,6 @@ inputFile.onchange = function() {
 
     };
 };
+
+inputFile.addEventListener("change", handleInputChange);
+
