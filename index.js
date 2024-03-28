@@ -3,7 +3,6 @@ const inputFile = document.getElementById("current-input");
 
 function handleInputChange() {
 	const maxWidth = document.getElementById("img-size").value;
-	const maxHeight = maxWidth;
 
 	displayImage.src = URL.createObjectURL(inputFile.files[0]);
 
@@ -11,20 +10,8 @@ function handleInputChange() {
 		const canvas = document.createElement('canvas');
 		const context = canvas.getContext('2d');
 
-		let width = displayImage.width;
-		let height = displayImage.height;
-
-		if (width > height) {
-			if (width > maxWidth) {
-				height *= maxWidth / width;
-				width = maxWidth;
-			}
-		} else {
-			if (height > maxHeight) {
-				width *= maxHeight / height;
-				height = maxHeight;
-			}
-		}
+		let width = maxWidth;
+		let height = maxWidth * 0.75;
 
 		canvas.width = width;
 		canvas.height = height;
@@ -65,7 +52,6 @@ function handleInputChange() {
 		let downloadText = "";
 		let displayText = "";
 
-		console.log(displayImage.height);
 		for (let y = 0; y < displayImage.height; y++) {
 			let text = "";
 			for (let x = 0; x < displayImage.width; x++) {
